@@ -1,0 +1,241 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:body>
+	<ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+
+			<div class="row">
+
+				<div class="col-md-1"></div>
+
+				<!-- 				infos salaires -->
+				<div class="col-md-3">
+					<h1>
+						Salaires
+						<h:outputLabel value="#{budgetCtrl.totalSalaire}"
+							style="color:green" />
+					</h1>
+					<hr />
+					<h:form>
+						<p:growl id="growl" showDetail="true" sticky="true" />
+						<h:message for="messageSalaire" style="color:red" />
+						<table>
+							<tr>
+								<td><h:outputLabel value="Nom : " id="nom" /></td>
+								<td><h:inputText id="messageSalaire"
+										value="#{budgetCtrl.salaireDto.nomSalaire}" required="true"
+										rendered="#{not budgetCtrl.edit}">
+										<f:validateLength minimum="1" maximum="20" />
+									</h:inputText></td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Somme : " /></td>
+								<td><h:inputText
+										value="#{budgetCtrl.salaireDto.sommeSalaire}"
+										rendered="#{not budgetCtrl.edit}" /></td>
+							</tr>
+						</table>
+						<h:commandButton value="Valider"
+							actionListener="#{budgetCtrl.addSalaire}" update="growl" />
+					</h:form>
+
+					<hr />
+					<h2>Liste des salaires</h2>
+					<hr />
+
+					<h:form>
+						<p:dataTable var="s" value="#{budgetCtrl.salaires}">
+
+							<p:column headerText="Nom">
+								<h:outputText value="#{s.nomSalaire}" />
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:inputText value="#{budgetCtrl.salaireDto.sommeSalaire}"
+									rendered="#{s.editable}" />
+								<h:outputText value="#{s.sommeSalaire}"
+									rendered="#{not s.editable}" />
+							</p:column>
+
+							<p:column headerText="Action">
+								<h:commandLink value="Modif /"
+									action="#{budgetCtrl.editerSalaire}"
+									rendered="#{not s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.salaire}" />
+								</h:commandLink>
+								<h:commandLink value=" Sup" action="#{budgetCtrl.deleteSalaire}"
+									rendered="#{not s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.salaire}" />
+								</h:commandLink>
+								<h:commandButton value="Valider"
+									action="#{budgetCtrl.updateSalaire(budgetCtrl.salaireDto.sommeSalaire)}"
+									rendered="#{s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.salaire}" />
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</div>
+
+				<!-- 				infos entrees -->
+				<div class="col-md-3">
+					<h1>
+						Entrées
+						<h:outputLabel value="#{budgetCtrl.totalEntree}"
+							style="color:green" />
+					</h1>
+					<hr />
+					<h:form>
+						<h:messages for="messageEntree" style="color:red" />
+						<table>
+							<tr>
+								<td><h:outputLabel value="Nom de l'entrée : " /></td>
+								<td><h:inputText id="messageEntree"
+										value="#{budgetCtrl.entreeDto.nomEntree}" required="true"
+										rendered="#{not budgetCtrl.edit}">
+										<f:validateLength minimum="1" maximum="20" />
+									</h:inputText>
+								</td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Somme : " /></td>
+								<td><h:inputText
+										value="#{budgetCtrl.entreeDto.sommeEntree}" rendered="#{not budgetCtrl.edit}"/></td>
+							</tr>
+						</table>
+						<h:commandButton value="Valider" action="#{budgetCtrl.addEntree}" />
+					</h:form>
+
+					<hr />
+					<h2>Liste des entrées</h2>
+					<hr />
+
+					<h:form>
+						<p:dataTable var="s" value="#{budgetCtrl.entrees}">
+
+							<p:column headerText="Nom">
+								<h:outputText value="#{s.nomEntree}" />
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:inputText value="#{budgetCtrl.entreeDto.sommeEntree}"
+									rendered="#{s.editable}" />
+								<h:outputText value="#{s.sommeEntree}"
+									rendered="#{not s.editable}" />
+							</p:column>
+
+							<p:column headerText="Action">
+								<h:commandLink value="Modif /"
+									action="#{budgetCtrl.editerEntree}"
+									rendered="#{not s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.entree}" />
+								</h:commandLink>
+								<h:commandLink value=" Sup" action="#{budgetCtrl.deleteEntree}"
+									rendered="#{not s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.entree}" />
+								</h:commandLink>
+								<h:commandButton value="Valider"
+									action="#{budgetCtrl.updateEntree(budgetCtrl.entreeDto.sommeEntree)}"
+									rendered="#{s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.entree}" />
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</div>
+
+				<!-- 				infos depenses -->
+				<div class="col-md-3">
+					<h1>
+						Factures
+						<h:outputLabel value="#{budgetCtrl.totalDepense}"
+							style="color:red" />
+					</h1>
+					<hr />
+					<h:form>
+						<h:message for="messageDepense" style="color:red" />
+						<table>
+							<tr>
+								<td><h:outputLabel value="Nom de la facture : " /></td>
+								<td><h:inputText id="messageDepense"
+										value="#{budgetCtrl.depenseDto.nomDepense}" required="true"
+										rendered="#{not budgetCtrl.edit}">
+										<f:validateLength minimum="1" maximum="20" />
+									</h:inputText>
+								</td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Somme : " /></td>
+								<td><h:inputText
+										value="#{budgetCtrl.depenseDto.sommeDepense}" rendered="#{not budgetCtrl.edit}"/></td>
+							</tr>
+						</table>
+						<h:commandButton value="Valider" action="#{budgetCtrl.addDepense}" />
+					</h:form>
+
+					<hr />
+					<h2>Liste des dépenses</h2>
+					<hr />
+					<h:form>
+						<p:dataTable var="s" value="#{budgetCtrl.depenses}">
+
+							<p:column headerText="Nom">
+								<h:outputText value="#{s.nomDepense}" />
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:inputText value="#{budgetCtrl.depenseDto.sommeDepense}"
+									rendered="#{s.editable}" />
+								<h:outputText value="#{s.sommeDepense}"
+									rendered="#{not s.editable}" />
+							</p:column>
+
+							<p:column headerText="Action">
+								<h:commandLink value="Modif /"
+									action="#{budgetCtrl.editerDepense}"
+									rendered="#{not s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.depense}" />
+								</h:commandLink>
+								<h:commandLink value="Sup" action="#{budgetCtrl.deleteDepense}"
+									rendered="#{not s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.depense}" />
+								</h:commandLink>
+								<h:commandButton value="Valider"
+									action="#{budgetCtrl.updateDepense(budgetCtrl.depenseDto.sommeDepense)}"
+									rendered="#{s.editable}">
+									<f:setPropertyActionListener value="#{s}"
+										target="#{budgetCtrl.depense}" />
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</div>
+
+			</div>
+
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<h1>
+					Solde
+					<h:outputLabel value="#{budgetCtrl.total}" style="color:blue" />
+				</h1>
+			</div>
+			<div class="col-md-4"></div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
